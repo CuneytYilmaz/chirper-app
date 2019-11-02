@@ -1,4 +1,4 @@
-import { RECEIVE_TWEETS, TOOGLE_TWEET } from '../actions/tweets'
+import { RECEIVE_TWEETS, TOOGLE_TWEET, SAVE_TWEET } from '../actions/tweets'
 
 export default function tweets (state={}, action) {
     switch(action.type) {
@@ -16,6 +16,25 @@ export default function tweets (state={}, action) {
                         ? state[action.id].likes.filter((uid) => uid !== action.authedUser)
                         : state[action.id].likes.concat([action.authedUser])
                 }
+            }
+        case SAVE_TWEET :
+            const { tweet } = action
+
+            let replyingTo = {}
+
+            if (replyingTo !== null) {
+                replyingTo = {
+                    [tweet.replyingTo] : {
+                        ...state[tweet.replyingTo],
+                        replies: state[tweet.replyingTo].replies.concat([tweet.id])
+                    }
+                }
+            }
+
+            return {
+                ...state,
+                [action.tweet.id]: action.tweet,
+                ...replyingTo,
             }
         default :
             return state
