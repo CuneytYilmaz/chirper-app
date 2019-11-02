@@ -25,8 +25,13 @@ export function handleToogleTweet (info) {
 
         return saveLikeToggle(info)
             .catch((e) => {
+                const { id, authedUser, hasLiked } = info
                 console.warn('Error in handleToogleTweet: ', e)
-                dispatch(toggleTweet(info))
+                dispatch(toggleTweet({
+                    id,
+                    authedUser,
+                    hasLiked: !hasLiked
+                }))
                 alert('There was an error liking the tweet. Try again.')
             })
     }
